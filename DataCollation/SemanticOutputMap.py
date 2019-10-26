@@ -18,3 +18,5 @@ class SemanticMap():
     def _generateDummyMapping(self, dataSize = 5):
         
         self._mapDict = {}
+        
+        
