@@ -10,7 +10,8 @@ img = cv2.imread('samplepic_cropped.png', 0)
 img_colour = cv2.imread('samplepic_cropped.png', 1)
 
 ## 1. Edge detection
-edges = cv2.Canny(img,100,200)
+blurred = cv2.blur(img,(5,5))
+edges = cv2.Canny(blurred,100,200)
 
 ## 2. Dilation then erode
 kernel = np.ones((5,5),np.uint8)

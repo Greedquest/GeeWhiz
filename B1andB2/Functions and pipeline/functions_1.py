@@ -54,7 +54,7 @@ def create_img_sections (image_detect, image_display):
     
     # find contours in the binary image
     contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    count = 1
+    rectangle_coords = []
     for c in contours:
         
         # creating adding rectangles
@@ -62,11 +62,9 @@ def create_img_sections (image_detect, image_display):
         if w/h < 0.1 or w/h > 10:
             pass
         else:
-            top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
-            cv2.rectangle(image_display,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
+            rectangle_coords.append((x, y, w, h))
+    return rectangle_coords
+            
 
-            # Saving rectangles as new images
-            roi = image_display[bot_l:bot_r, top_l:top_r] 
-            cv2.imwrite("roi%d.jpg" % count , roi)
-            count = count+1
+            
 
