@@ -52,14 +52,8 @@ class LCDDisplay(Semantic):
         
 ### NEXT GENERATION INHERITED CLASSES
         
-class Switch(Discrete):
-    "The up/down switches"
-    
-class Button(Discrete):
-    "The big buttons that can be red/green"
-    
-class LED(Discrete):
-    "On/Off light switches"
+class Binary(Discrete):
+    "The up/down switches, and the big buttons"
     
 class NDial(Discrete):
     "Dial with discrete fixed points. Dictionary must account for this"
