@@ -4,11 +4,6 @@ from matplotlib import pyplot as plt
 import json
 import os
 
-
-with open('calibration.json','r') as json_file:
-    calibration = json.load(json_file)
-
-
 def get_button_state(raw_switch,cal_on,cal_off):
     size = np.shape(raw_switch)
     f = 100/size[1]
@@ -74,6 +69,8 @@ def get_button_state(raw_switch,cal_on,cal_off):
     '''
 
 if __name__ == '__main__':
+    with open('calibration.json','r') as json_file:
+        calibration = json.load(json_file)
     # change light_switch_states_ to r/g depending on button
     cal_on = np.array(calibration['light_switch_states_s']['on'])
     cal_off = np.array(calibration['light_switch_states_s']['off'])
