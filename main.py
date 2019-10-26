@@ -2,12 +2,14 @@ import cv2
 import numpy as np
 import DataCollation.Semantic_Class as SC
 import B3.light_switch
+import B1andB2.functions_1
 
 def subscript_np_array(box, arr):
-    return np.array([x[box[0][1]:box[0][1] + box[1][1]] for x in arr[box[0][0]:box[0][0] + box[1][0]]])
+    return np.array([x[box[0]:box[0] + box[2]] for x in arr[box[1]:box[1] + box[3]]])
 
 list_of_stuff = [
-    (lambda box : create_light(subscript_np_array(b, np_img), "g"))
+    (lambda box : create_light(subscript_np_array(b, np_img), "g")),
+    (lambda box : create_light(subscript_np_array(b, np_img), "r"))
 ]
 
 cals_dict = {
@@ -26,7 +28,7 @@ cals_dict = {
 }
 
 measure_func_dict = {
-    "light": lambda so : B3.light_switch.get_button_state(so.np, np.array(so.cal_on), np.array(so.cal_off))
+    "light": lambda so : B3.light_switch.get_button_state(so.np, np.array(so.cal_on), np.array(so.cal_off)),
 }
 
 def create_light(pixels, type):
@@ -42,9 +44,13 @@ SOs = []
 img_blcwht = cv2.imread('samplepic_cropped.png', 0)
 img_colour = cv2.imread('samplepic_cropped.png', 1)
 
-boxes = [((25,57),(98,105))]
+boxes = B1andB2.functions_1.cv2_to_box(img_colour)
+print(boxes)
+boxes = [boxes[7], boxes[8]]
 
 np_img = np.asarray(img_colour)
+
+print(np.shape(np_img))
 
 for i,b in enumerate(boxes):
     SOs.append(list_of_stuff[i](b))

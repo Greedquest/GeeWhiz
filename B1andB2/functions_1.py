@@ -45,7 +45,7 @@ def fill (image):
     # im_out is the filled in white on black image
     return im_out
 
-def create_img_sections (image_detect, image_display):
+def create_img_sections (image_detect):
     # image_detect is the im_out from fill function
     # image_display is the original image in colour
 
@@ -64,7 +64,7 @@ def create_img_sections (image_detect, image_display):
         else:
             rectangle_coords.append((x, y, w, h))
     return rectangle_coords
-            
 
-            
+def cv2_to_box(img):
+    return create_img_sections(fill(dilate_then_erode(edge_detection(img))))
 
