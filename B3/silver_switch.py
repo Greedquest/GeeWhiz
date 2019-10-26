@@ -19,11 +19,17 @@ def get_angle(raw_dial,offset=0):
 
     circles = cv2.HoughCircles(gdial,cv2.HOUGH_GRADIENT,1,20,
                                 param1=50,param2=30,minRadius=0,maxRadius=0)
-    circles = np.uint16(np.around(circles))
 
     blank = np.zeros((dsize[1],dsize[0]),np.uint8)
-    i = circles[0,0]
-    centre = (i[0],i[1])
+    try:
+        circles = np.uint16(np.around(circles))
+
+        i = circles[0,0]
+        centre = (i[0],i[1])
+    except:
+        centre = (dsize[1]//2,dsize[0]//2)
+        i = [0,0,dsize[0]//3]
+
     cv2.circle(blank,centre,int(i[2]*0.8),1,-1)
 
     masked = cv2.bitwise_and(raw_dial, raw_dial, mask=blank)
@@ -87,12 +93,9 @@ def get_angle(raw_dial,offset=0):
 
 if __name__ == '__main__':
     # change images/ red/blue depending on button
-    for filename in os.listdir('images/dial_disc'):
+    for filename in os.listdir('images/dial_test'):
         # if '3861' not in filename:
             # continue
-        raw_switch = cv2.imread('images/dial_disc/'+filename,cv2.IMREAD_COLOR)
+        raw_switch = cv2.imread('images/dial_test/'+filename,cv2.IMREAD_COLOR)
         print(filename)
-        try:
-            get_angle(raw_switch)
-        except:
-            pass
+        get_angle(raw_switch)
