@@ -10,19 +10,26 @@ class Semantic(ABC):
     def value(self):
         return self._value
     
-    @abstractmethod # Inherited classes must overwrite this or else run-time error
     @value.setter
-    def value(self,state):
+    def value(self, state):
+        self._valueSetter
+        
+    @abstractmethod # Inherited classes must overwrite this or else run-time error
+    def _valueSetter(self,state):
         pass  
-
+    
 # Inherited classes
 class Binary(Semantic):
     "Binary components on the panel, including switches and lights"
-    def __init__(self,):
-        self._value 
+    
+    def _valueSetter(self,state):
+        self._value = state
         
 class NState(Semantic):
     "Dial that has N values on the dial"
+    
+    def value(self,state):
+        pass
         
 class ContinuousDial(Semantic):
     "Dial that can rotate the full 360 degrees"
@@ -33,4 +40,8 @@ class NeedleDial(Semantic):
 class LCDDisplay(Semantic):
     "Parent class that covers word or number LCD displays"
    
-        
+if __name__=="__main__":
+    test = Binary("Barry")
+    test.value = "Gill"
+    print(test.name, test.value)
+    
