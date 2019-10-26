@@ -1,6 +1,6 @@
 """
 INPUT --> cropped image array of voltmeter
-OUTPUT --> angle (degrees) from the vertical (+ve anticlockwise)
+OUTPUT --> angle (degrees) from the vertical (+ve clockwise)
 
 assumes:
 - voltmeter dial is red
@@ -40,6 +40,8 @@ def get_voltmeter_angle(raw_dial):
 
     theta = np.arctan(line[1]/line[0])*180/np.pi
 
+    #don't question it
+    theta = -theta
     print(theta)
     return theta
 

@@ -1,6 +1,6 @@
 """
 INPUT --> cropped image array of turndial
-OUTPUT --> angle (degrees) from the vertical (+ve anticlockwise)
+OUTPUT --> angle (degrees) from the vertical (+ve clockwise)
 
 assumes:
 - sticker on dial with distinct direction
@@ -82,6 +82,8 @@ def get_angle(raw_dial,offset=0):
         else:
             theta += 180
 
+    #don't question it
+    theta = -theta
     print(theta)
     return theta
 
