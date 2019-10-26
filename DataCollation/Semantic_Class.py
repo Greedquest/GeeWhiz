@@ -7,6 +7,9 @@ class Semantic(ABC):
         self.meaning = meaning
         self._value = None
         
+    def __repr__(self):
+        return self.meaning
+        
     @property
     def value(self):
         return self._value
@@ -99,10 +102,15 @@ if __name__=="__main__":
     print(Needle_test.meaning, Needle_test.value)
     
     
-    Conditions = {Needle_test:[5,35],test:True}
+    Conditions = {Needle_test:[5,35],test:"On"} # Test conditions 
+    Result = {}
+    
     for i in Conditions:
         if type(Conditions[i])==list:
-            print(i.value>Conditions[i][0])
+            Result[i]=(i.value<Conditions[i][0])or(i.value>Conditions[i][1])
+        if type(Conditions[i])==str:
+            Result[i]=(i.value.upper()==Conditions[i].upper())
+            
             
 
     
