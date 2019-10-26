@@ -1,101 +1,108 @@
+# Classification of state of knob (on/off) switch
+# correlate against reference images - to be made
+
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 import json
-import os
 
-raw_dial = cv2.imread('images/dial_cont/left1.jpg')
-
-def get_angle(raw_dial,offset=0):
-    size = np.shape(raw_dial)
-    f = 100/size[1]
+# preprocess images to a standard form
+def preprocess(image):
+    
+    # resize to x = 100 pixels, keeping aspect ratio
+    size = np.shape(image)
+    f = 200/size[1]
     dsize = (int( size[1]*f ),int( size[0]*f ))
-    raw_dial = cv2.resize(raw_dial,dsize)
+    image = cv2.resize(image, dsize)
+    
+    # normalise
+    image = cv2.normalize(image, image,0,255,cv2.NORM_MINMAX)
+    
+    #blur
+    image_blur = cv2.medianBlur(image,13)
 
-    raw_dial = cv2.normalize(raw_dial, raw_dial,0,255,cv2.NORM_MINMAX)
+     
+    #circle finding
 
-    dial = cv2.medianBlur(raw_dial,5)
-    gdial = cv2.cvtColor(raw_dial,cv2.COLOR_BGR2GRAY)
-    gdial = cv2.Canny(gdial,150,200)
-
-    circles = cv2.HoughCircles(gdial,cv2.HOUGH_GRADIENT,1,20,
+    circles = cv2.HoughCircles(image_blur,cv2.HOUGH_GRADIENT,1,20,
                                 param1=50,param2=30,minRadius=0,maxRadius=0)
+    circles = np.uint16(np.around(circles))
 
+    
     blank = np.zeros((dsize[1],dsize[0]),np.uint8)
-    try:
-        circles = np.uint16(np.around(circles))
+    i = circles[0,0]        #biggest circle
+    cv2.circle(blank,(i[0],i[1]),i[2],1,-1)   
 
-        i = circles[0,0]
-        centre = (i[0],i[1])
-    except:
-        centre = (dsize[1]//2,dsize[0]//2)
-        i = [0,0,dsize[0]//3]
 
-    cv2.circle(blank,centre,int(i[2]*0.8),1,-1)
+    masked = cv2.bitwise_and(image, image, mask=blank)  #using a circular mask
+    
+    #coordinates of crop (based on circle)
+    bot_l = i[0] - i[2]
+    bot_r = i[0] + i[2]
+    top_l = i[1] - i[2]
+    top_r = i[1] + i[2]
+        
+    # crop to just the circle
+    roi = masked[top_l:top_r, bot_l:bot_r] 
+    
+    #resize to 100*100
+    new_size = (100,100)
+    resized_image = cv2.resize(roi, new_size)
+    
+    # threshold to binary 
+    ret, final_image = cv2.threshold(resized_image,20,255,cv2.THRESH_BINARY_INV)
+    
+    return final_image
 
-    masked = cv2.bitwise_and(raw_dial, raw_dial, mask=blank)
+# correlate two (preprocessed) images
+def correlate(image1, image2):
+    
+    #flatten into an array
+    image1 = np.array(image1)
+    image1 = image1.flatten()
+    image2 = np.array(image2)
+    image2 = image2.flatten()
+    
+    return np.sum(abs(image2-image1))
 
-    # cv2.imshow('im',masked)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+# difference of two images
+def difference(image1, image2):
+    
+    #flatten into an array
+    image1 = np.array(image1)
+    image1 = image1.flatten()
+    image2 = np.array(image2)
+    image2 = image2.flatten()
+    
+    
+    return np.sum(abs(image2-image1))
 
-    masked = cv2.cvtColor(masked,cv2.COLOR_BGR2GRAY)
-    masked = cv2.normalize(masked,masked,0,255,cv2.NORM_MINMAX)
-    _,masked = cv2.threshold(masked,200,255,cv2.THRESH_BINARY)
+# import raw images as grayscale
+knob_up_raw = cv2.imread('knob_up.png', 0)
+knob_down_raw = cv2.imread('knob_down.png', 0)
+test_raw = cv2.imread('knob_up.png', 0)
 
-    kern = np.ones((3,3),np.uint8)
-    masked = cv2.erode(masked,kern,iterations=2)
-
-    coords = np.stack(masked.nonzero(),axis=1)
-
-    line = cv2.fitLine(coords,cv2.DIST_L2,0,0.01,0.01)
-    # print(line)
-    theta = np.arctan(line[1]/line[0])*180/np.pi
-
-    masked = cv2.dilate(masked,kern,iterations=1)
-
-    cv2.circle(masked,centre,1,127,5)
-
-    sticker = masked.nonzero()
-    s_centre = np.mean(sticker,axis=1)
-    s_centre = np.array((s_centre[1],s_centre[0]))
-
-    if abs(line[0])>abs(line[1]):
-        change = s_centre[1]>centre[1]
-
-    else:
-        if theta < 0:
-            change = s_centre[0] < centre[0]
-        else:
-            change = s_centre[0] > centre[0]
-
-    if change:
-        if theta > 0:
-            theta -= 180
-        else:
-            theta += 180
-
-    print(theta)
-    return theta
-
-    # cv2.circle(masked,(int(s_centre[0]),int(s_centre[1])),1,127,5)
-
-    # diff = s_centre-centre
-    # diff = np.array((-diff[1],diff[0]))
-    # theta = np.arctan(diff[1]/diff[0])*180/np.pi
-
-    # print(theta)
-
-    # cv2.imshow('img',masked)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+# process images
+processed_up = preprocess(knob_up_raw)
+processed_down = preprocess(knob_down_raw)
+processed_test = preprocess(test_raw)
 
 
 
-if __name__ == '__main__':
-    # change images/ red/blue depending on button
-    for filename in os.listdir('images/dial_test'):
-        # if '3861' not in filename:
-            # continue
-        raw_switch = cv2.imread('images/dial_test/'+filename,cv2.IMREAD_COLOR)
-        print(filename)
-        get_angle(raw_switch)
+'''
+# correlate test image
+up_diff = difference(processed_test, processed_up)
+down_diff = difference(processed_test, processed_down)
+print(up_diff, down_diff)
+
+if down_diff > up_diff:
+    print('test = up')
+else:
+    print('test = down')
+'''
+
+cv2.imshow("knob_up_raw", knob_up_raw)
+cv2.imshow("processed_up", processed_up)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
