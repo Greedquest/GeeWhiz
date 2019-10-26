@@ -28,10 +28,13 @@ class Binary(Semantic):
     def value(self,state):
         self._value = self._valueMap[state]
         
-    
-        
-class NState(Semantic):
+class NDial(Semantic):
     "Dial that has N values on the dial"
+    
+    # Example value map is {[N,position]:value}
+    def __init__(self,name,valueMap):
+        self._valueMap = valueMap
+        super(Ndial,self).__init__(name)
     
     @Semantic.value.setter
     def value(self,state):
@@ -87,8 +90,13 @@ class LCDText(LCDDisplay):
         
    
 if __name__=="__main__":
+    
     test = Binary("Barry", {True:"On",False:"Off"})
     test.value = True
     print(test.name, test.value)
+    
+    Switchvalue = NDial("3 way switch", {0:"left",1:"middle",2:"right"})
+    test.value = 1
+    print(Switchvalue.name, Switchvalue.value)
     
     
