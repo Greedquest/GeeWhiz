@@ -23,6 +23,7 @@ def ConditionCheck(conditions_map, semantic_map):
     The idea is that this would be produced alongside an {OutputID:Semantic Object} at the start
     """
     
+    
     conditions = {} # An empty {Semantic Object:Conditions} object
     for i in conditions_map:
         # i becomes key, and we retain the same value as in semantic_map dictionary
