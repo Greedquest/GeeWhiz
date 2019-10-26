@@ -17,28 +17,17 @@ class Semantic(ABC):
     
 ### INHERITED CLASSES ###
         
-class Binary(Semantic):
+class Discrete(Semantic):
     "Binary components on the panel, including switches and lights"
     
     def __init__(self,name,valueMap={True:"On",False:"Off"}):
         self._valueMap = valueMap
-        super(Binary,self).__init__(name)
+        super(Discrete,self).__init__(name)
     
     @Semantic.value.setter
     def value(self,state):
         self._value = self._valueMap[state]
         
-class NDial(Semantic):
-    "Dial that has N values on the dial"
-    
-    # Example value map is {[N,position]:value}
-    def __init__(self,name,valueMap):
-        self._valueMap = valueMap
-        super(Ndial,self).__init__(name)
-    
-    @Semantic.value.setter
-    def value(self,state):
-        self._value = state
         
 class ContinuousDial(Semantic):
     "Dial that can rotate the full 360 degrees"
@@ -63,18 +52,18 @@ class LCDDisplay(Semantic):
         
 ### NEXT GENERATION INHERITED CLASSES
         
-class Switch(Binary):
+class Switch(Discrete):
     "The up/down switches"
     
     @Semantic.value.setter
     def value(self,state):
         self._value = state
     
-class Button(Binary):
+class Button(Discrete):
     "The big buttons that can be red/green"
     
     
-class LED(Binary):
+class LED(Discrete):
     "On/Off light switches"
     
         
@@ -91,12 +80,12 @@ class LCDText(LCDDisplay):
    
 if __name__=="__main__":
     
-    test = Binary("Barry", {True:"On",False:"Off"})
+    test = Discrete("Barry")
     test.value = True
     print(test.name, test.value)
     
-    Switchvalue = NDial("3 way switch", {0:"left",1:"middle",2:"right"})
-    test.value = 1
+    Switchvalue = Discrete("3 way switch", {0:"left",1:"middle",2:"right"})
+    Switchvalue.value = 1
     print(Switchvalue.name, Switchvalue.value)
     
     
