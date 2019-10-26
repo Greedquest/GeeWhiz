@@ -1,5 +1,5 @@
 import random
-import Semantic_Class as semantics
+import DataCollation.Semantic_Class as semantics
 
 
 class SemanticMap(dict):
@@ -22,7 +22,7 @@ def _randomSemanticClass():
     possibleTypes = (
         semantics.Discrete(f"Button {randID}"),
         semantics.LCDDisplay(f"LCD {randID}"),
-        semantics.ContinuousDial(f"ContinuousDial {randID}"),
+        semantics.ContinuousDial(f"ContinuousDial {randID}",0,180,7,11),
     )
 
     return random.choice(possibleTypes)
