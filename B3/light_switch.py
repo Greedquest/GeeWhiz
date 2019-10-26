@@ -8,14 +8,14 @@ import os
 with open('calibration.json','r') as json_file:
     calibration = json.load(json_file)
 
-cal_on = np.array(calibration['light_switch_states']['on'])
-cal_off = np.array(calibration['light_switch_states']['off'])
 
-def classify(raw_switch,fname,cal_on=cal_on,cal_off=cal_off):
+def classify(raw_switch,fname,cal_on,cal_off):
     size = np.shape(raw_switch)
     f = 100/size[1]
     dsize = (int( size[1]*f ),int( size[0]*f ))
     raw_switch = cv2.resize(raw_switch,dsize)
+
+    raw_switch = cv2.normalize(raw_switch, raw_switch,0,255,cv2.NORM_MINMAX)
 
     switch = cv2.medianBlur(raw_switch,5)
     gswitch = cv2.cvtColor(switch,cv2.COLOR_BGR2GRAY)
@@ -40,10 +40,13 @@ def classify(raw_switch,fname,cal_on=cal_on,cal_off=cal_off):
     d_off = np.linalg.norm(out-cal_off)
 
     print(fname)
+    print('Out: {}'.format(out))
     if d_off > d_on:
         print('ON!')
     else:
         print('OFF!')
+    print('Don {}\nDoff {}'.format(d_on,d_off) )
+    print('\n')
 
 
     '''
@@ -69,6 +72,12 @@ def classify(raw_switch,fname,cal_on=cal_on,cal_off=cal_off):
     cv2.destroyAllWindows()
     '''
 
-for filename in os.listdir('images'):
-    raw_switch = cv2.imread('images/'+filename,cv2.IMREAD_COLOR)
-    classify(raw_switch,filename)
+if __name__ == '__main__':
+    # change light_switch_states_ to r/g depending on button
+    cal_on = np.array(calibration['light_switch_states_s']['on'])
+    cal_off = np.array(calibration['light_switch_states_s']['off'])
+    # change images/ red/blue depending on button
+    button = 'small'
+    for filename in os.listdir('images/'+button):
+        raw_switch = cv2.imread('images/'+button+'/'+filename,cv2.IMREAD_COLOR)
+        classify(raw_switch,filename,cal_on,cal_off)
