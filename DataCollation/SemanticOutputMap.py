@@ -6,30 +6,34 @@ Created on Sat Oct 26 11:54:25 2019
 """
 import random
 import Semantic_Class as semantics
-from abc import ABC, abstractmethod
 
-class SemanticMap():
+class SemanticMap(dict):
     
-    def __init__(self, mapDict = None):
+    def __init__(self, mapDict = None, dummyDataSize = 5):
+        
         
         if mapDict == None:
-            self._generateDummyMapping
-        
+            #pre populate dict with random data if none provided
+            super(SemanticMap,self).__init__(self._dummyMapping(dummyDataSize))
+            
         else:
-            self._mapDict = mapDict
+            super(SemanticMap,self).__init__(mapDict)
     
-    def _generateDummyMapping(self, dataSize = 5):
+    def _dummyMapping(self, dataSize):
         
-        self._mapDict = {}
-        for i in range(dataSize):
-            self._mapDict[i] = RandomSemanticClass
+        return {outputID:_randomSemanticClass() for outputID in range(dataSize)}
+            
         
-def RandomSemanticClass():
-    possibleTypes = (semantics.Binary("button{0}".format(random.randint(1,100))),
-                     semantics.LCDDisplay("LCD{0}".format(random.randint(1,100))),)
+def _randomSemanticClass():
+    randID = random.randint(0,100)
+    possibleTypes = (semantics.Binary(f"Button {randID}"),
+                     semantics.LCDDisplay(f"LCD {randID}"),
+                     semantics.ContinuousDial(f"ContinuousDial {randID}")
     
     return random.choice(possibleTypes)
 
         
 if __name__ == '__main__':
-    print(RandomSemanticClass().name)
+    s = SemanticMap()
+    for key in s.keys():
+        print(key,type(s[key]), s[key].name)
