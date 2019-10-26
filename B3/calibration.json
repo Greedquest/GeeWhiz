@@ -1,0 +1,14 @@
+{
+"light_switch_states_g" : {
+  "on" : [0.00,0.95],
+  "off" : [0.17,0.84]
+},
+"light_switch_states_r" : {
+  "on" : [2.66,0.68],
+  "off" : [5.18,0.79]
+},
+"light_switch_states_s" : {
+  "on" : [1.06,1.04],
+  "off" : [1.38,0.74]
+}
+}
