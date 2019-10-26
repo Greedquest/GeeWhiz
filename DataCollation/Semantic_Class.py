@@ -55,16 +55,14 @@ class LCDDisplay(Semantic):
 class Switch(Discrete):
     "The up/down switches"
     
-    @Semantic.value.setter
-    def value(self,state):
-        self._value = state
-    
 class Button(Discrete):
     "The big buttons that can be red/green"
     
-    
 class LED(Discrete):
     "On/Off light switches"
+    
+class NDial(Discrete):
+    "Dial with discrete fixed points. Dictionary must account for this"
     
         
 class LCDNumerical(LCDDisplay):
@@ -80,11 +78,11 @@ class LCDText(LCDDisplay):
    
 if __name__=="__main__":
     
-    test = Discrete("Barry")
+    test = Switch("Barry")
     test.value = True
     print(test.name, test.value)
     
-    Switchvalue = Discrete("3 way switch", {0:"left",1:"middle",2:"right"})
+    Switchvalue = NDial("3 way switch", {0:"left",1:"middle",2:"right"})
     Switchvalue.value = 1
     print(Switchvalue.name, Switchvalue.value)
     
