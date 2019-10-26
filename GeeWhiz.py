@@ -1,11 +1,15 @@
 from DataCollation.SemanticOutputMap import SemanticMap
+from DataCollation.Semantic_Class import Discrete, 
+import random
+oldValues = {}
+
+def generateDummyValues(dummyMap):
+    for outputID,semanticObject in dummyMap:
+        if type(semanticObject) = 
 
 class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
-        
-    def __repr__(self):
-        return "oy"
 
     def Run(self):
         ###Get user input
@@ -16,7 +20,6 @@ class Runner:
         ### Update loop
         while True:
             self.updateValues()
-            # Convert to values
             # Add to database
             # check against error thresholds
             # if error then display alert
@@ -30,6 +33,11 @@ class Runner:
         self.semanticMap = (
             SemanticMap()
         )  # SemanticMap(None if useDummyData else getMappingData)
+        
+    def updateValues(self):
+        #read new values
+        generateDummyValues(self.semanticMap)
+        
 
     def defineDatabaseConnection(self):
         pass
@@ -37,9 +45,9 @@ class Runner:
     def setFaultConditions(self):
         pass
 
+    def sendEmail(self):
+        
 
 if __name__ == "__main__":
-    ###User input
     runner = Runner(True)
     runner.Run()
-    print(runner)
