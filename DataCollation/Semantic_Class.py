@@ -7,6 +7,9 @@ class Semantic(ABC):
         self.meaning = meaning
         self._value = None
         
+    def __repr__(self):
+        return self.meaning
+        
     @property
     def value(self):
         return self._value
@@ -49,7 +52,7 @@ class ContinuousDial(Semantic):
 #        self._start_value = start_value
 #        self._zero_value  = zero_value
     # OPTION B
-    def __init__(self, meaning, max_angle, min_angle, max_val, min_val):
+    def __init__(self, meaning, min_angle, max_angle, min_val, max_val):
         self._max_angle = max_angle
         self._min_angle = min_angle
         self._max_val   = max_val
@@ -67,7 +70,7 @@ class ContinuousDial(Semantic):
     # OPTION B
     @Semantic.value.setter
     def value(self,angle):
-        state = ((angle - self._min_angle)*(self._max_angle-self._min_angle)) / (self._max_val-self._min_val)
+        state = ((angle - self._max_angle)*(self._min_angle-self._max_angle)) / (self._min_val-self._max_val)
         self._value = state
         
         
@@ -88,6 +91,7 @@ if __name__=="__main__":
     test = Discrete("Fan Oven Status")
     test.value = True
     print(test.meaning, test.value)
+    print(test._valueMap)
     
     Switchvalue = Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
     Switchvalue.value = 1
@@ -96,5 +100,18 @@ if __name__=="__main__":
     Needle_test = ContinuousDial("Voltage", 20,-20,40,0)
     Needle_test.value = 10
     print(Needle_test.meaning, Needle_test.value)
+    
+    
+    Conditions = {Needle_test:[5,35],test:"On"} # Test conditions 
+    Result = {}
+    
+    for i in Conditions:
+        if type(Conditions[i])==list:
+            Result[i]=(i.value<Conditions[i][0])or(i.value>Conditions[i][1])
+        if type(Conditions[i])==str:
+            Result[i]=(i.value.upper()==Conditions[i].upper())
+            
+            
+
     
     
