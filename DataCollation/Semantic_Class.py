@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 # Create grandaddy class to cover all semantic classes
 class Semantic(ABC):
-    def __init__(self,name):
-        self.name = name
+    def __init__(self,semantic_meaning):
+        self.semantic_meaning = semantic_meaning
         self._value = None
         
     @property
@@ -17,25 +17,17 @@ class Semantic(ABC):
     
 ### INHERITED CLASSES ###
         
-class Binary(Semantic):
+class Discrete(Semantic):
     "Binary components on the panel, including switches and lights"
     
-    def __init__(self,name,valueMap={True:"On",False:"Off"}):
+    def __init__(self,semantic_meaning,valueMap={True:"On",False:"Off"}):
         self._valueMap = valueMap
-        super(Binary,self).__init__(name)
+        super(Discrete,self).__init__(semantic_meaning)
     
     @Semantic.value.setter
     def value(self,state):
         self._value = self._valueMap[state]
         
-    
-        
-class NState(Semantic):
-    "Dial that has N values on the dial"
-    
-    @Semantic.value.setter
-    def value(self,state):
-        self._value = state
         
 class ContinuousDial(Semantic):
     "Dial that can rotate the full 360 degrees"
@@ -60,25 +52,15 @@ class LCDDisplay(Semantic):
         
 ### NEXT GENERATION INHERITED CLASSES
         
-class Switch(Binary):
-    "The up/down switches"
+class Binary(Discrete):
+    "The up/down switches, and the big buttons"
     
-    @Semantic.value.setter
-    def value(self,state):
-        self._value = state
+class NDial(Discrete):
+    "Dial with discrete fixed points. Dictionary must account for this"
     
-class Button(Binary):
-    "The big buttons that can be red/green"
-    
-    
-class LED(Binary):
-    "On/Off light switches"
-    
-        
 class LCDNumerical(LCDDisplay):
     "The LCD screens that display numerical data"
-
-        
+       
 class LCDText(LCDDisplay):
     "The LCD screens that display rolling text"
     
@@ -87,8 +69,13 @@ class LCDText(LCDDisplay):
         
    
 if __name__=="__main__":
-    test = Binary("Barry", {True:"On",False:"Off"})
+    
+    test = Binary("Fan Oven Status")
     test.value = True
-    print(test.name, test.value)
+    print(test.semantic_meaning, test.value)
+    
+    Switchvalue = NDial("Oven Power", {0:"left",1:"middle",2:"right"})
+    Switchvalue.value = 1
+    print(Switchvalue.semantic_meaning, Switchvalue.value)
     
     
