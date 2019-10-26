@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 # Create grandaddy class to cover all semantic classes
 class Semantic(ABC):
-    def __init__(self,name):
-        self.name = name
+    def __init__(self,semantic_meaning):
+        self.semantic_meaning = semantic_meaning
         self._value = None
         
     @property
@@ -20,9 +20,9 @@ class Semantic(ABC):
 class Discrete(Semantic):
     "Binary components on the panel, including switches and lights"
     
-    def __init__(self,name,valueMap={True:"On",False:"Off"}):
+    def __init__(self,semantic_meaning,valueMap={True:"On",False:"Off"}):
         self._valueMap = valueMap
-        super(Discrete,self).__init__(name)
+        super(Discrete,self).__init__(semantic_meaning)
     
     @Semantic.value.setter
     def value(self,state):
@@ -58,11 +58,9 @@ class Binary(Discrete):
 class NDial(Discrete):
     "Dial with discrete fixed points. Dictionary must account for this"
     
-        
 class LCDNumerical(LCDDisplay):
     "The LCD screens that display numerical data"
-
-        
+       
 class LCDText(LCDDisplay):
     "The LCD screens that display rolling text"
     
@@ -72,12 +70,12 @@ class LCDText(LCDDisplay):
    
 if __name__=="__main__":
     
-    test = Switch("Barry")
+    test = Binary("Fan Oven Status")
     test.value = True
-    print(test.name, test.value)
+    print(test.semantic_meaning, test.value)
     
-    Switchvalue = NDial("3 way switch", {0:"left",1:"middle",2:"right"})
+    Switchvalue = NDial("Oven Power", {0:"left",1:"middle",2:"right"})
     Switchvalue.value = 1
-    print(Switchvalue.name, Switchvalue.value)
+    print(Switchvalue.semantic_meaning, Switchvalue.value)
     
     
