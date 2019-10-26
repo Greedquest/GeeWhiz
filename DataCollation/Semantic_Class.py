@@ -34,36 +34,44 @@ class ContinuousDial(Semantic):
     """
     Dial that can rotate through an angle less than 360 degrees
     
-    ValueMap should have the following input: (mintheta,maxtheta,minval,maxval,val_at_0)
-    """
-    
-    def __init__(self,meaning,valueMap):
-        self._valueMap = valueMap
-        super(Discrete,self).__init__(meaning)
-    
-#    @Semantic.value.setter
-#    def value(self,angle):
-#        angle_proportion = ()/()
-#        state = angle_proportion * (valueMap[4])
-#        self._value = state
+    ValueMap should have the following possible inputs, depending on what is commented: 
         
-class NeedleDial(Semantic):
-    """
-    Dial that can rotate through an angle less than 360 degrees
+    [all angles measured off the vertical, with clockwise positive]
+    OPTION A: You know the current angle from vision, read the current value and zero value
+    OPTION B: You know/measure the extreme values and angles (min_angle expected negative)
     
-    ValueMap should have the following input: (start_theta, start_val,val_at_0)
     Note therefore initial calibration will be needed
     """
     
-    def __init__(self,meaning,valueMap):
-        self._valueMap = valueMap
-        super(NeedleDial,self).__init__(meaning)
+    # OPTION A
+#    def __init__(self, meaning, start_angle, start_value, zero_value):
+#        self._start_angle = start_angle
+#        self._start_value = start_value
+#        self._zero_value  = zero_value
+    # OPTION B
+    def __init__(self, meaning, max_angle, min_angle, max_val, min_val):
+        self._max_angle = max_angle
+        self._min_angle = min_angle
+        self._max_val   = max_val
+        self._min_val   = min_val
         
+        super(ContinuousDial,self).__init__(meaning)
+    
+    # OPTION A
+#    @Semantic.value.setter
+#    def value(self,angle):
+#        angle_proportion = abs(self._start_value-self._zero_value)/abs(self._start_angle)
+#        state = self._zero_value + (angle_proportion * angle)
+#        self._value = state
+        
+    # OPTION B
     @Semantic.value.setter
     def value(self,angle):
-        angle_proportion = abs(self._valueMap[1]-self._valueMap[2])/abs(self._valueMap[0])
-        state = self._valueMap[2] + (angle_proportion * angle)
+        state = ((angle - self._min_angle)*(self._max_angle-self._min_angle)) / (self._max_val-self._min_val)
         self._value = state
+        
+        
+        
         
 class LCDDisplay(Semantic):
     "Parent class that covers word or number LCD displays"
@@ -71,36 +79,21 @@ class LCDDisplay(Semantic):
     @Semantic.value.setter
     def value(self,state):
         self._value = state
-        
-### NEXT GENERATION INHERITED CLASSES
-        
-class Binary(Discrete):
-    "The up/down switches, and the big buttons"
-    
-class NDial(Discrete):
-    "Dial with discrete fixed points. Dictionary must account for this"
-    
-class LCDNumerical(LCDDisplay):
-    "The LCD screens that display numerical data"
-       
-class LCDText(LCDDisplay):
-    "The LCD screens that display rolling text"
-    
+ 
 
-        
-        
+### TESTS        
    
 if __name__=="__main__":
     
-    test = Binary("Fan Oven Status")
+    test = Discrete("Fan Oven Status")
     test.value = True
     print(test.meaning, test.value)
     
-    Switchvalue = NDial("Oven Power", {0:"left",1:"middle",2:"right"})
+    Switchvalue = Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
     Switchvalue.value = 1
     print(Switchvalue.meaning, Switchvalue.value)
     
-    Needle_test = NeedleDial("Voltage", (-10,5,7))
+    Needle_test = ContinuousDial("Voltage", 20,-20,40,0)
     Needle_test.value = 10
     print(Needle_test.meaning, Needle_test.value)
     
