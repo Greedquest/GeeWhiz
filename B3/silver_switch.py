@@ -111,25 +111,27 @@ else:
     print('test = down')
 '''
 
+def get_switch_state(raw_switch):
+    raw_switch = preprocess(raw_switch)
+    flipped = np.flip(np.flip(raw_switch,0),1)
+
+    combo = np.logical_and(flipped,raw_switch)
+    xor = np.logical_xor(combo,raw_switch).astype(np.uint8)*255
+    vals = np.nonzero(xor)[0]
+    mean = np.mean(vals)
+
+    if mean < np.shape(xor)[0]/2:
+        print('down')
+        return 0
+    else:
+        print('up')
+        return 1
+
+
 if __name__ == '__main__':
 
     for filename in os.listdir('images/silver_switch/'):
         print(filename)
         raw_switch = cv2.imread('images/silver_switch/'+filename,0)
-        raw_switch = preprocess(raw_switch)
-        flipped = np.flip(np.flip(raw_switch,0),1)
-
-        combo = np.logical_and(flipped,raw_switch)
-        xor = np.logical_xor(combo,raw_switch).astype(np.uint8)*255
-        vals = np.nonzero(xor)[0]
-        mean = np.mean(vals)
-
-        if mean < np.shape(xor)[0]/2:
-            print('down')
-        else:
-            print('up')
-
-        cv2.imshow('h',xor)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        get_switch_state(raw_switch)
 
