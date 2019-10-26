@@ -48,6 +48,8 @@ def classify(raw_switch,fname,cal_on,cal_off):
     print('Don {}\nDoff {}'.format(d_on,d_off) )
     print('\n')
 
+    return d_off > d_on
+
 
     '''
     raw_switch_on = cv2.resize(raw_switch_on,(200,200))
