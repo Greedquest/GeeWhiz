@@ -4,12 +4,7 @@ from matplotlib import pyplot as plt
 import json
 import os
 
-
-with open('calibration.json','r') as json_file:
-    calibration = json.load(json_file)
-
-
-def classify(raw_switch,fname,cal_on,cal_off):
+def get_button_state(raw_switch,cal_on,cal_off):
     size = np.shape(raw_switch)
     f = 100/size[1]
     dsize = (int( size[1]*f ),int( size[0]*f ))
@@ -39,7 +34,6 @@ def classify(raw_switch,fname,cal_on,cal_off):
     d_on = np.linalg.norm(out-cal_on)
     d_off = np.linalg.norm(out-cal_off)
 
-    print(fname)
     print('Out: {}'.format(out))
     if d_off > d_on:
         print('ON!')
@@ -47,6 +41,8 @@ def classify(raw_switch,fname,cal_on,cal_off):
         print('OFF!')
     print('Don {}\nDoff {}'.format(d_on,d_off) )
     print('\n')
+
+    return d_off > d_on
 
 
     '''
@@ -73,6 +69,8 @@ def classify(raw_switch,fname,cal_on,cal_off):
     '''
 
 if __name__ == '__main__':
+    with open('calibration.json','r') as json_file:
+        calibration = json.load(json_file)
     # change light_switch_states_ to r/g depending on button
     cal_on = np.array(calibration['light_switch_states_s']['on'])
     cal_off = np.array(calibration['light_switch_states_s']['off'])
@@ -80,4 +78,5 @@ if __name__ == '__main__':
     button = 'small'
     for filename in os.listdir('images/'+button):
         raw_switch = cv2.imread('images/'+button+'/'+filename,cv2.IMREAD_COLOR)
-        classify(raw_switch,filename,cal_on,cal_off)
+        print(filename)
+        get_button_state(raw_switch,cal_on,cal_off)
