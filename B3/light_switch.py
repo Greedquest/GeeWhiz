@@ -1,3 +1,17 @@
+"""
+INPUT --> cropped image array of light switch + calibration values
+OUTPUT --> boolean TRUE when on
+
+assumes:
+- nothing
+
+This requires calibration values for each button
+record values for average
+    r/g  and   b/g
+for the on and off state of each button used
+
+store in json file?
+"""
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt

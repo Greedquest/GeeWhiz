@@ -1,3 +1,11 @@
+"""
+INPUT --> cropped image array of turndial
+OUTPUT --> angle (degrees) from the vertical (+ve anticlockwise)
+
+assumes:
+- sticker on dial with distinct direction
+- circular dial knob
+"""
 import numpy as np
 import cv2
 import json

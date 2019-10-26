@@ -1,3 +1,11 @@
+"""
+INPUT --> cropped image array of voltmeter
+OUTPUT --> angle (degrees) from the vertical (+ve anticlockwise)
+
+assumes:
+- voltmeter dial is red
+- angles are confined to ±90
+"""
 import numpy as np
 import cv2
 import os

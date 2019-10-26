@@ -1,3 +1,12 @@
+"""
+INPUT --> cropped image array of silver switch
+OUTPUT --> boolean TRUE when up?
+
+assumes:
+- on state ~ off state rotated by 180 degrees
+- switch is vertical
+- (circular switch) (not really required though)
+"""
 # Classification of state of knob (on/off) switch
 # correlate against reference images - to be made
 
