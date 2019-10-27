@@ -1,4 +1,7 @@
 from DataCollation.SemanticOutputMap import SemanticMap
+from DataCollation.Semantic_Class import Discrete, 
+import random
+import threading
 from ImageProcessing import update_so_values, get_so_list
 from E3.Fault_Conditions import ConditionCheck as check_for_error
 
@@ -11,6 +14,8 @@ def generateDummyValues(dummyMap):
 class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
+        if dummyRun:
+            self.refreshDelay = 3000; 
         self.conditionMaps = []
 
     def Run(self):
@@ -26,6 +31,7 @@ class Runner:
             self.writeToDatabase()
             # check against error thresholds
             # if error then display alert
+            threading.thread.sleep(self.refreshDelay)
             break
 
         print("Done!")
