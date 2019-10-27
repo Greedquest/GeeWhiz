@@ -107,6 +107,7 @@ def get_so_list(img_colour):
     # print(np.shape(np_img))
 
     ## GET BOX TYPES FROM EMAIL
+    # is this seriously what you're doing.... - B.
     # box_types is a dictionary e.g {1 (box number): "type"}
     box_types = {1:'text display', 2:'seven segment display', 3:'voltmeter', 4:'silver switch', 5:'dial', 6:'three state', 7:'small light', 8:'red light', 9:'green light'}
 
