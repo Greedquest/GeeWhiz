@@ -49,8 +49,8 @@ class App:
     def updateImage(self):
         print("Snap")
         #self.imagePath = "samplepic_cropped.png"
-        self.imagePath = "newimage.png"
-        #camCapture(self.imagePath)
+        #self.imagePath = "newimage.png"
+        camCapture(self.imagePath)
         self.chickenpic = cv2.imread(self.imagePath,1)
         
     def defineDatabaseConnection(self):
@@ -76,6 +76,7 @@ class App:
 
     def setFaultConditions(self):
         # generate condition maps
+        #self.conditionMaps = [{5:"right"}]
         self.conditionMaps = []
         pass
 
