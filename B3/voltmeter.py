@@ -19,12 +19,12 @@ def get_voltmeter_angle(raw_dial):
 
     hsv_dial = cv2.cvtColor(raw_dial,cv2.COLOR_BGR2HSV)
 
-    lower_red = np.array([0,120,70])
-    upper_red = np.array([10,255,255])
+    lower_red = np.array([0,110,60])
+    upper_red = np.array([30,255,255])
     mask1 = cv2.inRange(hsv_dial,lower_red,upper_red)
 
-    lower_red = np.array([170,120,70])
-    upper_red = np.array([180,255,255])
+    lower_red = np.array([160,110,60])
+    upper_red = np.array([190,255,255])
     mask2 = cv2.inRange(hsv_dial,lower_red,upper_red)
 
     mask = mask1+mask2
