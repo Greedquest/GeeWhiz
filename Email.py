@@ -1,4 +1,4 @@
-#from DataCollation import Semantic_Class as Sem
+from DataCollation import Semantic_Class as Sem
 
 def sendEmail(msg):
     import smtplib
@@ -67,23 +67,23 @@ def dispatchFaultMessage(conditions_map, semantic_map, to):
     
     sendEmail(msg)
     
-#if __name__ == "__main__":
-#    #from DataCollation.SemanticOutputMap import _randomSemanticClass as randSemantic
-#    
-#    test = Sem.Discrete("Fan Oven Status")
-#    test.value = True
-##    print(test.meaning, test.value)
-##    print(test._valueMap)
-#    
-#    Switchvalue = Sem.Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
-#    Switchvalue.value = 1
-#    #print(Switchvalue.meaning, Switchvalue.value)
-#    
-#    Needle_test = Sem.ContinuousDial("Voltage", 20,-20,40,0)
-#    Needle_test.value = 10
-#    #print(Needle_test.meaning, Needle_test.value)
-#    
-#    Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
-#    Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
-#    dispatchFaultMessage(Example_conditionsmap,Example_semanticmap, "sm2232@cam.ac.uk")
+if __name__ == "__main__":
+    #from DataCollation.SemanticOutputMap import _randomSemanticClass as randSemantic
     
+    test = Sem.Discrete("Fan Oven Status")
+    test.value = True
+#    print(test.meaning, test.value)
+#    print(test._valueMap)
+    
+    Switchvalue = Sem.Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
+    Switchvalue.value = 1
+    #print(Switchvalue.meaning, Switchvalue.value)
+    
+    Needle_test = Sem.ContinuousDial("Voltage", 20,-20,40,0)
+    Needle_test.value = 10
+    #print(Needle_test.meaning, Needle_test.value)
+    
+    Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
+    Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
+    dispatchFaultMessage(Example_conditionsmap,Example_semanticmap, "tww26@cam.ac.uk")
+   

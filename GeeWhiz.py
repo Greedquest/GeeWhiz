@@ -4,15 +4,16 @@ import random
 oldValues = {}
 
 def generateDummyValues(dummyMap):
-    for outputID,semanticObject in dummyMap:
-        if type(semanticObject) = 
+    #for outputID,semanticObject in dummyMap:
+     #   if type(semanticObject) = 
 
 class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
 
     def Run(self):
-        ###Get user input
+        ###Get user input - get all the calibrations and initialisations
+        # define scope
         self.generateOutputMapping(self._useDummyData)
         self.defineDatabaseConnection()
         self.setFaultConditions()
@@ -30,6 +31,8 @@ class Runner:
 
     def generateOutputMapping(self, useDummyData=True):
         "Generate the mapping between Semantic objects and their ids"
+        # do all the b1 b2 stuff here
+        #get a list of semantic objects to pass
         self.semanticMap = (
             SemanticMap()
         )  # SemanticMap(None if useDummyData else getMappingData)
