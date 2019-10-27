@@ -91,6 +91,7 @@ def create_placeholder(pixels):
 
 
 def get_so_list(img_colour):
+    #print(img_colour, type(img_colour), np.shape(img_colour))
     SOs = []
     # main list of all semantic objects
 
@@ -128,8 +129,9 @@ def get_so_list(img_colour):
     return SOs
 
 def update_so_values(SOs,img_colour):
-
+    print("here")
     for so in SOs:
+        print(so, type(so))
         so.np = subscript_np_array(so.box,img_colour)
         try:
             so.value = so.measure_func(so)

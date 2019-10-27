@@ -12,6 +12,7 @@ from ImageProcessing import update_so_values, get_so_list
 from E3.Fault_Conditions import ConditionCheck as check_for_error
 from Email import dispatchFaultMessage
 from camCapture import camCapture
+import cv2
 
 
 class App:
@@ -20,19 +21,19 @@ class App:
         if dummyRun:
             self.refreshDelay = 2.4
             # seconds
-        self.imagePath = "chickenpic"
+        self.imagePath = "B1andB2/lobotomy"
 
     def Run(self):
         ###Get user input - get all the calibrations and initialisations
         # define scope
-        camCapture(self.imagePath)
+        self.updateImage()
         self.generateOutputMapping()
         self.defineDatabaseConnection()
         self.setFaultConditions()
 
         ### Update loop
-        while False:
-            print("Snap")
+        while True:
+            print(self.semanticMap)
             self.updateValues()
             self.writeToDatabase()
             if self.checkForErrors():
@@ -40,10 +41,15 @@ class App:
             else:
                 sleep(self.refreshDelay)
 
-            camCapture(self.imagePath)
+            self.updateImage()
 
         print("Done!")
 
+    def updateImage(self):
+        print("Snap")
+        camCapture(self.imagePath)
+        self.chickenPic = cv2.imread(self.imagePath,1)
+        
     def defineDatabaseConnection(self):
         define_log(self.semanticMap.values())
 
@@ -54,14 +60,12 @@ class App:
         "Generate the mapping between Semantic objects and their ids"
         # do all the b1 b2 stuff here
         # get a list of semantic objects to pass
-        self.semanticMap = SemanticMap(
-            None if self._useDummyData else get_so_list(self.imagePath)
-        )
+        self.semanticMap = SemanticMap(get_so_list(self.chickenPic))
 
     def updateValues(self):
         # read new values
 
-        update_so_values(self.semanticMap.values(), self.imagePath)
+        update_so_values(self.semanticMap.values(), self.chickenPic)
 
     def setFaultConditions(self):
         # generate condition maps
