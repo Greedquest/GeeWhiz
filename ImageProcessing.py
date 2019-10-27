@@ -7,11 +7,13 @@ import B3.silver_switch
 import B3.voltmeter
 # import B3.light_switch
 import B1andB2.functions_1
+import B3.seven_seg
 
 def subscript_np_array(box, arr):
     return np.array([x[box[0]:box[0] + box[2]] for x in arr[box[1]:box[1] + box[3]]])
 
 list_of_stuff = [
+    (lambda b,np_img : create_disp(subscript_np_array(b,np_img))),
     (lambda b,np_img : create_voltmeter(subscript_np_array(b,np_img))),
     (lambda b,np_img : create_silver(subscript_np_array(b,np_img))),
     (lambda b,np_img : create_dial(subscript_np_array(b,np_img))),
@@ -46,6 +48,11 @@ measure_func_dict = {
 dial_dic = {
     'cont' : ((-180,180),(-10,10)),
 }
+
+def create_disp(pixels):
+    r = SC.LCDDisplay('silver_switch')
+    r.measure_func = lambda so : B3.seven_seg.seven_seg_disp(so.np)
+    return r
 
 def create_silver(pixels):
     r = SC.Discrete('silver_switch')
@@ -88,7 +95,7 @@ def get_so_list(img_colour):
 
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
     # print(boxes)
-    boxes = boxes[2:-1]
+    boxes = boxes[1:-1]
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])
