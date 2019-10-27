@@ -30,7 +30,20 @@ class Discrete(Semantic):
     
     @Semantic.value.setter
     def value(self,state):
-        self._value = self._valueMap[state]
+        
+        def find_nearest(array, value):
+           
+            stateArray = np.array(list(array))
+            differenceArray = np.abs(stateArray - value)
+            idx = differenceArray.argmin()
+            return stateArray[idx]
+        
+        "A Discrete value lookup will map state to the closest matching value for comparable types, or exact match for anything else"
+        try:
+            self._value = self._valueMap[state]
+        
+        except KeyError:
+            self._value = self._valueMap[find_nearest(self._valueMap.keys(), state)]
         
         
 class ContinuousDial(Semantic):
@@ -71,8 +84,7 @@ class ContinuousDial(Semantic):
     @Semantic.value.setter
     def value(self,angle):
         state = ((angle - self._max_angle)*(self._min_angle-self._max_angle)) / (self._min_val-self._max_val)
-        self._value = state
-        
+        self._value = state       
         
         
         
@@ -134,26 +146,39 @@ def ConditionCheck(conditions_map, semantic_map):
    
 if __name__=="__main__":
     
-    test = Discrete("Fan Oven Status")
-    test.value = True
-    print(test.meaning, test.value)
-    print(test._valueMap)
+    niceDiscrete = Discrete("Oven fan switch",{"On":"YASSS","Off":"NAY"})
+    nastyDiscrete = Discrete("Bakery dial",{-30:"left",0:"middle",30:"right"})
     
-    Switchvalue = Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
-    Switchvalue.value = 1
-    print(Switchvalue.meaning, Switchvalue.value)
+    niceDiscrete.value = "On"
+    assert niceDiscrete.value == "YASSS"
+        
+    nastyDiscrete.value = 0
+    assert nastyDiscrete.value == "middle"
     
-    Needle_test = ContinuousDial("Voltage", 20,-20,40,0)
-    Needle_test.value = 10
-    print(Needle_test.meaning, Needle_test.value)
     
-    Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
-    Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
+    nastyDiscrete.value = 15.5
+    print(nastyDiscrete.value)
     
-    #ConditionsMap = {Needle_test:[5,35],test:"On",Switchvalue:"middle"} # Test conditions 
-    
-    print(ConditionCheck(Example_conditionsmap,Example_semanticmap))
-    
+#    test = Discrete("Fan Oven Status")
+#    test.value = True
+#    print(test.meaning, test.value)
+#    print(test._valueMap)
+#    
+#    Switchvalue = Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
+#    Switchvalue.value = 1
+#    print(Switchvalue.meaning, Switchvalue.value)
+#    
+#    Needle_test = ContinuousDial("Voltage", 20,-20,40,0)
+#    Needle_test.value = 10
+#    print(Needle_test.meaning, Needle_test.value)
+#    
+#    Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
+#    Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
+#    
+#    #ConditionsMap = {Needle_test:[5,35],test:"On",Switchvalue:"middle"} # Test conditions 
+#    
+#    print(ConditionCheck(Example_conditionsmap,Example_semanticmap))
+#    
     
 
             

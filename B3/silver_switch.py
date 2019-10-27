@@ -30,14 +30,18 @@ def preprocess(image):
     
     #blur
     image_blur = cv2.medianBlur(image,13)
+    # cv2.imshow('k',image_blur)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
      
     #circle finding
 
-    circles = cv2.HoughCircles(image_blur,cv2.HOUGH_GRADIENT,1,20,
-                                param1=50,param2=30,minRadius=0,maxRadius=0)
+
     blank = np.zeros((dsize[1],dsize[0]),np.uint8)
     try:
+        circles = cv2.HoughCircles(image_blur,cv2.HOUGH_GRADIENT,1,20,
+                                param1=50,param2=30,minRadius=0,maxRadius=0)
         circles = np.uint16(np.around(circles))
         circles = np.uint16(np.around(circles))
 
@@ -45,13 +49,16 @@ def preprocess(image):
         centre = (i[0],i[1])
     except:
         centre = (dsize[1]//2,dsize[0]//2)
-        i = [0,0,dsize[0]//3]
+        i = [centre[0],centre[1],dsize[0]//3]
 
     
     cv2.circle(blank,centre,i[2],1,-1)   
 
 
     masked = cv2.bitwise_and(image, image, mask=blank)  #using a circular mask
+    # cv2.imshow('k',masked)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     
     #coordinates of crop (based on circle)
     bot_l = i[0] - i[2]
