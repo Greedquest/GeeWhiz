@@ -137,10 +137,10 @@ def get_switch_state(raw_switch):
     mean = np.mean(vals)
 
     if mean < np.shape(xor)[0]/2:
-        print('down')
+        # print('down')
         return 0
     else:
-        print('up')
+        # print('up')
         return 1
 
 

@@ -48,13 +48,13 @@ def get_button_state(raw_switch,cal_on,cal_off):
     d_on = np.linalg.norm(out-cal_on)
     d_off = np.linalg.norm(out-cal_off)
 
-    print('Out: {}'.format(out))
-    if d_off > d_on:
-        print('ON!')
-    else:
-        print('OFF!')
-    print('Don {}\nDoff {}'.format(d_on,d_off) )
-    print('\n')
+    # print('Out: {}'.format(out))
+    # if d_off > d_on:
+        # print('ON!')
+    # else:
+        # print('OFF!')
+    # print('Don {}\nDoff {}'.format(d_on,d_off) )
+    # print('\n')
 
     return d_off > d_on
 
