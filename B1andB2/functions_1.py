@@ -49,16 +49,17 @@ def fill (image):
     # im_out is the filled in white on black image
     return im_out
 
-def create_img_sections (image_detect):
+def create_img_sections (image):
     # image_detect is the im_out from fill function
     # image_display is the original image in colour
 
     # convert the grayscale image to binary image
-    ret,thresh = cv2.threshold(image_detect,127,255,0)
+    ret,thresh = cv2.threshold(image,127,255,0)
     
     # find contours in the binary image
-    contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    _, contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     rectangle_coords = []
+    count = 1
     for c in contours:
         
         # creating adding rectangles
@@ -66,7 +67,12 @@ def create_img_sections (image_detect):
         if w/h < 0.3 or w/h > 3:
             pass
         else:
+            top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
             rectangle_coords.append((x, y, w, h))
+            cv2.rectangle(image,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
+            cv2.putText(image, str(count), (x - 10, y - 10),
+		        cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
+        count += 1
     return rectangle_coords
 
 def cv2_to_box(img):

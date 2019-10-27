@@ -12,16 +12,16 @@ import B3.seven_seg
 def subscript_np_array(box, arr):
     return np.array([x[box[0]:box[0] + box[2]] for x in arr[box[1]:box[1] + box[3]]])
 
-list_of_stuff = [
-    (lambda b,np_img : create_disp(subscript_np_array(b,np_img))),
-    (lambda b,np_img : create_voltmeter(subscript_np_array(b,np_img))),
-    (lambda b,np_img : create_silver(subscript_np_array(b,np_img))),
-    (lambda b,np_img : create_dial(subscript_np_array(b,np_img))),
-    (lambda b,np_img : create_threestate(subscript_np_array(b,np_img))),
-    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "s")), #6
-    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "g")),
-    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "r"))
-]
+dict_of_stuff = {
+    'seven segment display' : (lambda b,np_img : create_disp(subscript_np_array(b,np_img))),
+    'voltmeter' : (lambda b,np_img : create_voltmeter(subscript_np_array(b,np_img))),
+    'silver switch' : (lambda b,np_img : create_silver(subscript_np_array(b,np_img))),
+    'dial' : (lambda b,np_img : create_dial(subscript_np_array(b,np_img))),
+    'three state' : (lambda b,np_img : create_threestate(subscript_np_array(b,np_img))),
+    'small light' : (lambda b,np_img : create_light(subscript_np_array(b, np_img), "s")),
+    'green light' : (lambda b,np_img : create_light(subscript_np_array(b, np_img), "g")),
+    'red light' : (lambda b,np_img : create_light(subscript_np_array(b, np_img), "r"))
+}
 
 cals_dict = {
     "g" : {
@@ -43,7 +43,6 @@ measure_func_dict = {
     "volt": lambda so: B3.voltmeter.get_voltmeter_angle(so.np),
     "silver": lambda so: B3.silver_switch.get_switch_state(so.np),
     "dial": lambda so: B3.dial.get_angle(so.np),
-    "display": lambda so: B3.seven_seg.seven_seg_disp(so.np)
 }
 
 dial_dic = {
@@ -51,7 +50,7 @@ dial_dic = {
 }
 
 def create_disp(pixels):
-    r = SC.LCDDisplay('7sed_disp')
+    r = SC.LCDDisplay('7seg_disp')
     r.measure_func = lambda so : B3.seven_seg.seven_seg_disp(so.np)
     return r
 
@@ -91,14 +90,13 @@ def create_placeholder(pixels):
 
 
 def get_so_list(img_colour):
-    #print(img_colour, type(img_colour), np.shape(img_colour))
     SOs = []
     # main list of all semantic objects
 
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
 
     # print(boxes)
-    boxes = boxes[1:-1]
+    boxes = boxes[0:-1]
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])
@@ -108,18 +106,31 @@ def get_so_list(img_colour):
 
     # print(np.shape(np_img))
 
+    ## GET BOX TYPES FROM EMAIL
+    # box_types is a dictionary e.g {1 (box number): "type"}
+    box_types = {1:'text display', 2:'seven segment display', 3:'voltmeter', 4:'silver switch', 5:'dial', 6:'three state', 7:'small light', 8:'red light', 9:'green light'}
 
-    for i,b in enumerate(boxes):
-        SOs.append(list_of_stuff[i](b,np_img))
 
+    for i, b in enumerate(boxes):
+        print ("enumerate", i)
+        print(box_types[i+1])
+        
+        try:
+            box_type = box_types[i+1]
+            SOs.append(dict_of_stuff[box_type](b,np_img))
+        except:
+            pass
+        print("SO length", len(SOs))
         # match the correct creation function to box
         # return a variable that speciies the type of input enclosed
         # make a dictionary of all the create_typeofinput
         # type = types[i]
         # SOs.append(function_dict[type](zoomed_in_img))
         # zoomed in image by calling subscript_np_array(b,np_img)
-        
-        SOs[-1].box = b
+        try:
+            SOs[-1].box = b
+        except:
+            pass
         # except IndexError:
         # pixels = subscript_np_array(b,np_img)
         # SOs.append(create_placeholder(pixels))
@@ -129,9 +140,8 @@ def get_so_list(img_colour):
     return SOs
 
 def update_so_values(SOs,img_colour):
-    print("here")
+
     for so in SOs:
-        print(so, type(so))
         so.np = subscript_np_array(so.box,img_colour)
         try:
             so.value = so.measure_func(so)

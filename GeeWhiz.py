@@ -1,60 +1,88 @@
-from DataCollation.SemanticOutputMap import SemanticMap
-from DataCollation.Semantic_Class import Discrete, 
-import random
-import threading
-oldValues = {}
+import sys
+import os
+from pathlib import Path
+currentFile = Path(os.path.realpath(__file__))
+sys.path.append(str(currentFile.parent))
+sys.path.append(str(currentFile.parent / "DataCollation"))
 
-def generateDummyValues(dummyMap):
-    #for outputID,semanticObject in dummyMap:
-     #   if type(semanticObject) = 
+from SemanticOutputMap import SemanticMap
+from database import define_log, write_to_log
+from time import sleep
+from ImageProcessing import update_so_values, get_so_list
+from E3.Fault_Conditions import ConditionCheck as check_for_error
+from Email import dispatchFaultMessage
+from camCapture import camCapture
+import cv2
 
-class Runner:
-    def __init__(self, dummyRun=True):
+
+class App:
+    def __init__(self, dummyRun=False):
         self._useDummyData = dummyRun
         if dummyRun:
-            self.refreshDelay = 3000; 
+            self.refreshDelay = 2.4
+            # seconds
+        self.imagePath = "B1andB2/lobotomy"
 
     def Run(self):
         ###Get user input - get all the calibrations and initialisations
         # define scope
-        self.generateOutputMapping(self._useDummyData)
+        self.updateImage()
+        self.generateOutputMapping()
         self.defineDatabaseConnection()
         self.setFaultConditions()
 
         ### Update loop
         while True:
+            print(self.semanticMap)
             self.updateValues()
-            # Add to database
-            # check against error thresholds
-            # if error then display alert
-            threading.thread.sleep(self.refreshDelay)
-            break
+            self.writeToDatabase()
+            if self.checkForErrors():
+                break
+            else:
+                sleep(self.refreshDelay)
+
+            self.updateImage()
 
         print("Done!")
-        print(self.semanticMap)
 
-    def generateOutputMapping(self, useDummyData=True):
+    def updateImage(self):
+        print("Snap")
+        camCapture(self.imagePath)
+        self.chickenPic = cv2.imread(self.imagePath,1)
+        
+    def defineDatabaseConnection(self):
+        define_log(self.semanticMap.values())
+
+    def writeToDatabase(self):
+        write_to_log(self.semanticMap.values())
+
+    def generateOutputMapping(self):
         "Generate the mapping between Semantic objects and their ids"
         # do all the b1 b2 stuff here
-        #get a list of semantic objects to pass
-        self.semanticMap = (
-            SemanticMap()
-        )  # SemanticMap(None if useDummyData else getMappingData)
-        
-    def updateValues(self):
-        #read new values
-        generateDummyValues(self.semanticMap)
-        
+        # get a list of semantic objects to pass
+        self.semanticMap = SemanticMap(get_so_list(self.chickenPic))
 
-    def defineDatabaseConnection(self):
-        pass
+    def updateValues(self):
+        # read new values
+
+        update_so_values(self.semanticMap.values(), self.chickenPic)
 
     def setFaultConditions(self):
+        # generate condition maps
+        self.conditionMaps = []
         pass
 
-    def sendEmail(self):
-        
+    def checkForErrors(self):
+        for conditionMap in self.conditionMaps:
+            if check_for_error(conditionMap, self.semanticMap):
+                # send error alert
+                dispatchFaultMessage(conditionMap, self.semanticMap)
+                anyError = True
+
+        return anyError
+
 
 if __name__ == "__main__":
-    runner = Runner(True)
-    runner.Run()
+
+    geeWhizApp = App(True)
+    geeWhizApp.Run()
