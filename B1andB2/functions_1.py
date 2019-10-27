@@ -63,7 +63,7 @@ def create_img_sections (image_detect):
         
         # creating adding rectangles
         x,y,w,h = cv2.boundingRect(c)
-        if w/h < 0.1 or w/h > 10:
+        if w/h < 0.3 or w/h > 3:
             pass
         else:
             rectangle_coords.append((x, y, w, h))
