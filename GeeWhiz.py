@@ -48,7 +48,8 @@ class App:
 
     def updateImage(self):
         print("Snap")
-        self.imagePath = "samplepic_cropped.png"
+        #self.imagePath = "samplepic_cropped.png"
+        self.imagePath = "newimage.png"
         #camCapture(self.imagePath)
         self.chickenpic = cv2.imread(self.imagePath,1)
         
