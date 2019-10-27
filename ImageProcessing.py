@@ -50,7 +50,7 @@ dial_dic = {
 }
 
 def create_disp(pixels):
-    r = SC.LCDDisplay('silver_switch')
+    r = SC.LCDDisplay('7sed_disp')
     r.measure_func = lambda so : B3.seven_seg.seven_seg_disp(so.np)
     return r
 
@@ -94,6 +94,7 @@ def get_so_list(img_colour):
     # main list of all semantic objects
 
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
+
     # print(boxes)
     boxes = boxes[1:-1]
     # print(np.array(boxes)[...,1])
@@ -108,6 +109,14 @@ def get_so_list(img_colour):
 
     for i,b in enumerate(boxes):
         SOs.append(list_of_stuff[i](b,np_img))
+
+        # match the correct creation function to box
+        # return a variable that speciies the type of input enclosed
+        # make a dictionary of all the create_typeofinput
+        # type = types[i]
+        # SOs.append(function_dict[type](zoomed_in_img))
+        # zoomed in image by calling subscript_np_array(b,np_img)
+        
         SOs[-1].box = b
         # except IndexError:
         # pixels = subscript_np_array(b,np_img)
@@ -121,7 +130,10 @@ def update_so_values(SOs,img_colour):
 
     for so in SOs:
         so.np = subscript_np_array(so.box,img_colour)
-        so.value = so.measure_func(so)
+        try:
+            so.value = so.measure_func(so)
+        except:
+            print('couldn\'t update SO: ' + so.meaning)
     
 
 if __name__ == '__main__':
