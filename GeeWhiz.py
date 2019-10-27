@@ -1,15 +1,17 @@
 from DataCollation.SemanticOutputMap import SemanticMap
-from DataCollation.Semantic_Class import Discrete, 
-import random
+from ImageProcessing import update_so_values, get_so_list
+from E3.Fault_Conditions import ConditionCheck as check_for_error
+
 oldValues = {}
 
 def generateDummyValues(dummyMap):
-    #for outputID,semanticObject in dummyMap:
-     #   if type(semanticObject) = 
+    pass
+
 
 class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
+        self.conditionMaps = []
 
     def Run(self):
         ###Get user input - get all the calibrations and initialisations
@@ -21,7 +23,7 @@ class Runner:
         ### Update loop
         while True:
             self.updateValues()
-            # Add to database
+            self.writeToDatabase()
             # check against error thresholds
             # if error then display alert
             break
@@ -33,9 +35,7 @@ class Runner:
         "Generate the mapping between Semantic objects and their ids"
         # do all the b1 b2 stuff here
         #get a list of semantic objects to pass
-        self.semanticMap = (
-            SemanticMap()
-        )  # SemanticMap(None if useDummyData else getMappingData)
+        self.semanticMap = SemanticMap(None if useDummyData else get_so_list('samplepic_cropped.png'))
         
     def updateValues(self):
         #read new values
@@ -46,10 +46,13 @@ class Runner:
         pass
 
     def setFaultConditions(self):
+        #generate condition map
         pass
 
     def sendEmail(self):
-        
+        pass
+    
+    def writeToDatabase(self)
 
 if __name__ == "__main__":
     runner = Runner(True)
