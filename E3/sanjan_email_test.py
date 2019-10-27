@@ -32,7 +32,7 @@ def download_attachments(msg, download_folder=''):
                 print('Downloaded "{file}" from email titled "{subject}".'.format(file=fileName, subject=subject))
     
 
-def read_email_from_gmail(FROM_EMAIL, FROM_PWD, subject_keyword, how_many=1, SMTP_SERVER="imap.gmail.com"):
+def read_email_from_gmail(FROM_EMAIL, FROM_PWD, subject_keyword, how_many=1, download_folder='',SMTP_SERVER="imap.gmail.com"):
     try:
         
         #--------------------------THIS BIT WORKS, DON't EDIT -----------------------------
@@ -88,7 +88,7 @@ def read_email_from_gmail(FROM_EMAIL, FROM_PWD, subject_keyword, how_many=1, SMT
                     #print('----------')
                     
                     # downloading attachments
-                    download_attachments(msg, '')
+                    download_attachments(msg, download_folder)
                     
         return body
     except Exception as e:
