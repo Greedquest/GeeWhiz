@@ -5,13 +5,14 @@ import cv2
 
 #reading the image 
 
-#img = cv2.imread('samplepic.png', 0)
-img = cv2.imread('samplepic_cropped.png', 0)
-img_colour = cv2.imread('samplepic_cropped.png', 1)
+img = cv2.imread('samplepic.png', 0)
+img_colour = cv2.imread('samplepic.png', 1)
+#img = cv2.imread('samplepic_cropped.png', 0)
+#img_colour = cv2.imread('samplepic_cropped.png', 1)
 
 ## 1. Edge detection
 blurred = cv2.blur(img,(5,5))
-edges = cv2.Canny(blurred,100,200)
+edges = cv2.Canny(blurred,50,200)
 
 ## 2. Dilation then erode
 kernel = np.ones((5,5),np.uint8)
@@ -59,7 +60,7 @@ for c in contours:
     
     # adding rectangles
     x,y,w,h = cv2.boundingRect(c)
-    if w/h < 0.1 or w/h > 10:
+    if w/h < 0.3 or w/h > 3:
         pass
     else:
         top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
