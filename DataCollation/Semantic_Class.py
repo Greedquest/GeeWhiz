@@ -59,33 +59,16 @@ class ContinuousDial(Semantic):
     Note therefore initial calibration will be needed
     """
     
-    # OPTION A
-#    def __init__(self, meaning, start_angle, start_value, zero_value):
-#        self._start_angle = start_angle
-#        self._start_value = start_value
-#        self._zero_value  = zero_value
-    # OPTION B
     def __init__(self, meaning, min_angle, max_angle, min_val, max_val):
-        self._max_angle = max_angle
-        self._min_angle = min_angle
-        self._max_val   = max_val
-        self._min_val   = min_val
+        self._stateRange = [min_angle,max_angle]
+        self._valueRange = [min_val,max_val]
         
         super(ContinuousDial,self).__init__(meaning)
     
-    # OPTION A
-#    @Semantic.value.setter
-#    def value(self,angle):
-#        angle_proportion = abs(self._start_value-self._zero_value)/abs(self._start_angle)
-#        state = self._zero_value + (angle_proportion * angle)
-#        self._value = state
-        
-    # OPTION B
+    
     @Semantic.value.setter
-    def value(self,angle):
-        state = ((angle - self._max_angle)*(self._min_angle-self._max_angle)) / (self._min_val-self._max_val)
-        self._value = state       
-        
+    def value(self,state):
+        self._value = np.interp(state,self._stateRange, self._valueRange)
         
         
 class LCDDisplay(Semantic):
@@ -146,40 +129,9 @@ def ConditionCheck(conditions_map, semantic_map):
    
 if __name__=="__main__":
     
-    niceDiscrete = Discrete("Oven fan switch",{"On":"YASSS","Off":"NAY"})
-    nastyDiscrete = Discrete("Bakery dial",{-30:"left",0:"middle",30:"right"})
-    
-    niceDiscrete.value = "On"
-    assert niceDiscrete.value == "YASSS"
-        
-    nastyDiscrete.value = 0
-    assert nastyDiscrete.value == "middle"
-    
-    
-    nastyDiscrete.value = 15.5
-    print(nastyDiscrete.value)
-    
-#    test = Discrete("Fan Oven Status")
-#    test.value = True
-#    print(test.meaning, test.value)
-#    print(test._valueMap)
-#    
-#    Switchvalue = Discrete("Oven Power", {0:"left",1:"middle",2:"right"})
-#    Switchvalue.value = 1
-#    print(Switchvalue.meaning, Switchvalue.value)
-#    
-#    Needle_test = ContinuousDial("Voltage", 20,-20,40,0)
-#    Needle_test.value = 10
-#    print(Needle_test.meaning, Needle_test.value)
-#    
-#    Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
-#    Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
-#    
-#    #ConditionsMap = {Needle_test:[5,35],test:"On",Switchvalue:"middle"} # Test conditions 
-#    
-#    print(ConditionCheck(Example_conditionsmap,Example_semanticmap))
-#    
-    
+    voltmeter = ContinuousDial("Voltmeter",-15,15,0,15)
+    voltmeter.value = 10
+    print(voltmeter.value)
 
             
     

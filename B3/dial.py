@@ -84,7 +84,7 @@ def get_angle(raw_dial,offset=0):
 
     #don't question it
     theta = -theta
-    print(theta)
+    # print(theta)
     return theta
 
     # cv2.circle(masked,(int(s_centre[0]),int(s_centre[1])),1,127,5)
