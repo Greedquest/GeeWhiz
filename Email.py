@@ -12,6 +12,8 @@ def sendEmail(msg):
     server.send_message(msg)
     server.quit()
     
+
+    
     
 def dispatchFaultMessage(conditions_map, semantic_map, to):
     """
@@ -68,5 +70,5 @@ if __name__ == "__main__":
     
     Example_semanticmap   = {"ID1":Needle_test,"ID2":test,"ID3":Switchvalue}
     Example_conditionsmap = {"ID1":[5,25],"ID2":"On","ID3":"middle"}
-    dispatchFaultMessage(Example_conditionsmap,Example_semanticmap, "tww26@cam.ac.uk")
+    dispatchFaultMessage(Example_conditionsmap,Example_semanticmap, "gh454@cam.ac.uk")
    

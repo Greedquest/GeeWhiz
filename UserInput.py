@@ -2,6 +2,7 @@
 import pandas as pd
 
 #file = pd.read_csv(r"C:\Users\Tomos\Documents\Programming, Projects\Python\IfM Hackathon\conditions.csv")
+import DataCollation.Semantic_Class as sem
 
 def ConditionMapCreator(semantic_map,file):
     "Produces a list of condition maps from a given file"
@@ -19,7 +20,7 @@ def ConditionMapCreator(semantic_map,file):
             ObjectID = file[file.columns[2+j]].values[i]
             # What is the condition? DEPENDS ON THE TYPE
             
-            if type(semantic_map[ObjectID])==ContinuousDial:
+            if type(semantic_map[ObjectID])==sem.ContinuousDial:
                 Condition = []
                 Condition.append(float(file[file.columns[4+2*j]].values[i]))
                 Condition.append(float(file[file.columns[5+2*j]].values[i]))
