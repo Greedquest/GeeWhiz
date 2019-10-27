@@ -43,6 +43,7 @@ measure_func_dict = {
     "volt": lambda so: B3.voltmeter.get_voltmeter_angle(so.np),
     "silver": lambda so: B3.silver_switch.get_switch_state(so.np),
     "dial": lambda so: B3.dial.get_angle(so.np),
+    "display": lambda so: B3.seven_seg.seven_seg_disp(so.np)
 }
 
 dial_dic = {
@@ -123,7 +124,7 @@ def get_so_list(img_colour):
         # SOs.append(create_placeholder(pixels))
 
     # update_so_values(SOs,img_colour)
-
+    print(len(SOs))
     return SOs
 
 def update_so_values(SOs,img_colour):
@@ -144,6 +145,7 @@ if __name__ == '__main__':
     for so in SOs:
         print(so.meaning)
         print(so.value)
+        print(so.box)
         print('\n')
 
 
