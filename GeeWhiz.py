@@ -1,13 +1,11 @@
-from DataCollation.SemanticOutputMap import SemanticMap
-from DataCollation.database import define_log, write_to_log
+from SemanticOutputMap import SemanticMap
+from database import define_log, write_to_log
 from time import sleep
 from ImageProcessing import update_so_values, get_so_list
 from E3.Fault_Conditions import ConditionCheck as check_for_error
 from Email import dispatchFaultMessage
 from camCapture import camCapture
 
-
-oldValues = {}
 
 
 class App:
@@ -27,7 +25,7 @@ class App:
         self.setFaultConditions()
 
         ### Update loop
-        while True:
+        while False:
             self.updateValues()
             self.writeToDatabase()
             if self.checkForErrors():
@@ -74,5 +72,11 @@ class App:
 
 
 if __name__ == "__main__":
+    import sys
+    import os
+    from pathlib import Path
+    currentFile = Path(os.path.realpath(__file__))
+    sys.path.append(str(currentFile.parent / "DataCollation"))
+    print(sys.path)
     geeWhizApp = App(True)
     geeWhizApp.Run()
