@@ -96,9 +96,12 @@ def get_so_list(img_colour):
     # main list of all semantic objects
 
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
+    boxes = boxes[1:-1] #fix off by one error
+    print('Boxes : ', len(boxes))
+    print(boxes)
 
     # print(boxes)
-    boxes = boxes[1:-1]
+    
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])
@@ -125,7 +128,7 @@ def get_so_list(img_colour):
         # SOs.append(create_placeholder(pixels))
 
     # update_so_values(SOs,img_colour)
-    print(len(SOs))
+
     return SOs
 
 def update_so_values(SOs,img_colour):

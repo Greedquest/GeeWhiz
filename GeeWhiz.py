@@ -13,6 +13,7 @@ from E3.Fault_Conditions import ConditionCheck as check_for_error
 from Email import dispatchFaultMessage
 from camCapture import camCapture
 import cv2
+import random
 
 
 class App:
@@ -47,7 +48,8 @@ class App:
 
     def updateImage(self):
         print("Snap")
-        camCapture(self.imagePath)
+        self.imagePath = "samplepic_cropped.png"
+        #camCapture(self.imagePath)
         self.chickenpic = cv2.imread(self.imagePath,1)
         
     def defineDatabaseConnection(self):
@@ -60,12 +62,16 @@ class App:
         "Generate the mapping between Semantic objects and their ids"
         # do all the b1 b2 stuff here
         # get a list of semantic objects to pass
-        self.semanticMap = SemanticMap({objectIndex:semanticObject for objectIndex,semanticObject in enumerate(get_so_list(self.chickenpic))})
+        so_list = get_so_list(self.chickenpic)
+        print(so_list)
+        self.semanticMap = SemanticMap({objectIndex:semanticObject for objectIndex,semanticObject in enumerate(so_list)})
 
     def updateValues(self):
         # read new values
 
         update_so_values(self.semanticMap.values(), self.chickenpic)
+        #for i in self.semanticMap.values():
+        #    i.value = random.randint(1,9)
 
     def setFaultConditions(self):
         # generate condition maps
@@ -73,6 +79,7 @@ class App:
         pass
 
     def checkForErrors(self):
+        anyError = False
         for conditionMap in self.conditionMaps:
             if check_for_error(conditionMap, self.semanticMap):
                 # send error alert
