@@ -36,74 +36,39 @@ def sendEmail(msg):
 #                    print('From : ' + email_from + '\n')
 #                    print('Subject : ' + email_subject + '\n')
                     
-                    
-import smtplib
-import time
-import imaplib
-import email
+import imaplib, email, os
 
-# -------------------------------------------------
-#
-# Utility to read email from Gmail Using Python
-#
-# ------------------------------------------------
+user = 'geewhiz833@gmail.com'
+password = '1234AbCd'
+imap_url = 'imap.gmail.com'
+# sets up the auth
+def auth(user,password,imap_url):
+    con = imaplib.IMAP4_SSL(imap_url)
+    con.login(user,password)
+    return con
+# extracts the body from the email
+def get_body(msg):
+    if msg.is_multipart():
+        return get_body(msg.get_payload(0))
+    else:
+        return msg.get_payload(None,True)
+#search for a particular email
+def search(key,value,con):
+    result, data  = con.search(None,key,'"{}"'.format(value))
+    return data
+#extracts emails from byte array
+def get_emails(result_bytes):
+    msgs = []
+    for num in result_bytes[0].split():
+        typ, data = con.fetch(num, '(RFC822)')
+        msgs.append(data)
+    return msgs
 
-def read_email_from_gmail():
-#    try:
-    #mail = imaplib.IMAP4_SSL('smtp.gmail.com', 465)
-    mail = imaplib.IMAP4_SSL('smtp.gmail.com', 465)
-    mail.login("geewhiz833@gmail.com" , "1234AbCd")
-    mail.select('inbox')
+con = auth(user,password,imap_url)
+con.select('INBOX')
 
-    type, data = mail.search(None, 'ALL')
-    mail_ids = data[0]
-
-    id_list = mail_ids.split()   
-    first_email_id = int(id_list[0])
-    latest_email_id = int(id_list[-1])
-
-
-    for i in range(latest_email_id,first_email_id, -1):
-        typ, data = mail.fetch(i, '(RFC822)' )
-
-        for response_part in data:
-            if isinstance(response_part, tuple):
-                msg = email.message_from_string(response_part[1])
-                email_subject = msg['subject']
-                email_from = msg['from']
-                print('From : ' + email_from + '\n')
-                print('Subject : ' + email_subject + '\n')
-
-#    except(Exception, e):
-#        print(str(e))
-                    
-
-#
-#    except Exception, e:
-#        
-#        print str(e)
-    
-    # Import the email modules we'll need
-
-#    server.send_message(msg)
-#    server.quit()
-    
-#def dispatchFaultMessage(faultObject, to):
-#    from email.message import EmailMessage
-#    faultObject.value = "SANJAN DAS"
-#    
-#    msg = EmailMessage()
-#    
-#    msg.set_content(f"Commander,\n\nFault conditions have been violated on your control panel!({faultObject.value}){faultObject.meaning}\n\nThe factory is in peril! \n\nBest wishes, \nGeeWhizWare")
-#    
-#    # me == the sender's email address
-#    # you == the recipient's email address
-#    msg['Subject'] = f"Error in {faultObject.meaning}"
-#    msg['From'] = "geewhiz833@gmail.com"
-#    msg['To'] = to
-#    
-#    
-#    sendEmail(msg)
+result, data = con.fetch(b'10','(RFC822)')
+raw = email.message_from_bytes(data[0][1])
     
 def dispatchFaultMessage(conditions_map, semantic_map, to):
     """
