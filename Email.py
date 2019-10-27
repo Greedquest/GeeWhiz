@@ -29,7 +29,7 @@ def dispatchFaultMessage(faultObject, to):
     sendEmail(msg)
     
 if __name__ == "__main__":
-    from DataCollation.SemanticOutputMap import _randomSemanticClass as semantic
+    from DataCollation.SemanticOutputMap import _randomSemanticClass as randSemantic
     
-    dispatchFaultMessage(semantic(), "gh454@cam.ac.uk")
+    dispatchFaultMessage(randSemantic(), "tww26@cam.ac.uk")
     
