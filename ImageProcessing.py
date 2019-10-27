@@ -19,8 +19,8 @@ list_of_stuff = [
     (lambda b,np_img : create_dial(subscript_np_array(b,np_img))),
     (lambda b,np_img : create_threestate(subscript_np_array(b,np_img))),
     (lambda b,np_img : create_light(subscript_np_array(b, np_img), "s")), #6
-    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "g")),
-    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "r"))
+    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "r")),
+    (lambda b,np_img : create_light(subscript_np_array(b, np_img), "g"))
 ]
 
 cals_dict = {
@@ -91,13 +91,24 @@ def create_placeholder(pixels):
 
 
 def get_so_list(img_colour):
+    #print(img_colour, type(img_colour), np.shape(img_colour))
     SOs = []
     # main list of all semantic objects
 
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
+    
+    
+    boxes = [(199, 362, 209, 98), (161, 249, 98, 67), (323, 217, 128, 127), (412, 162, 21, 28), (278, 159, 47, 49), (144, 141, 77, 82), (412, 86, 20, 19), (266, 52, 73, 65), (146, 51, 75, 66)]
+    boxes = boxes[1:] #fix off by one error
+    print('Boxes : ', len(boxes))
+    print(boxes)
 
     # print(boxes)
+<<<<<<< HEAD
     boxes = boxes[0:-1]
+=======
+    
+>>>>>>> 854ee5d7f5aa3b192aac6edff97c8a226c0a1ab5
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])
@@ -124,7 +135,7 @@ def get_so_list(img_colour):
         # SOs.append(create_placeholder(pixels))
 
     # update_so_values(SOs,img_colour)
-    print(len(SOs))
+
     return SOs
 
 def update_so_values(SOs,img_colour):
@@ -137,7 +148,7 @@ def update_so_values(SOs,img_colour):
     
 
 if __name__ == '__main__':
-    img = cv2.imread('samplepic_cropped.png',1)
+    img = cv2.imread('newimage.png',1)
     SOs = get_so_list(img)
     update_so_values(SOs,img)
 

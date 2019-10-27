@@ -9,8 +9,8 @@ import cv2
 #img_colour = cv2.imread('samplepic.png', 1)
 #img = cv2.imread('samplepic_cropped.png', 0)
 #img_colour = cv2.imread('samplepic_cropped.png', 1)
-img = cv2.imread('newimage.png', 0)
-img_colour = cv2.imread('newimage.png', 1)
+img = cv2.imread('newimage2.png', 0)
+img_colour = cv2.imread('newimage2.png', 1)
 
 ## 1. Edge detection
 blurred = cv2.blur(img,(5,5))
@@ -90,7 +90,7 @@ for c in contours:
         # display the image
         cv2.imshow("Image", img_colour)
         cv2.waitKey(0)
-    
+cv2.imwrite("image_with_boxes.jpg", img_colour)   
 print("rectangle_coords: ", rectangle_coords)
    
 
