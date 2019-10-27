@@ -9,11 +9,18 @@ import imutils
 
 def edge_detection (image):
     # image is cropped grayscale original image
-    return cv2.Canny(image,100,200)
+    img = cv2.Canny(image,100,200)
+    #cv2.imshow('test', img)
+    #cv2.waitKey(0)
+    return img
 
 def dilate_then_erode (image):
+    #cv2.imshow('test',image)
+    #cv2.waitKey(0)
+    #print(image.shape())
     # image is output of edge_detection
     kernel = np.ones((5,5),np.uint8)
+    #print(kernel)
 
     dilation = cv2.dilate(image,kernel,iterations = 2)
     erode = cv2.erode(dilation,kernel,iterations = 1)
@@ -216,5 +223,11 @@ def seven_seg_disp (image):
         number += i * (10**(power))
 
     return number
+
+
+if __name__ == "__main__":
+    img = cv2.imread('samplepic_cropped.png', 1)
+    cv2.imshow('test',dilate_then_erode(img))
+    cv2.waitKey(0)
 
 

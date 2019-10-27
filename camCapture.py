@@ -5,7 +5,7 @@ def camCapture(imgfilename):
     
     ret, frame = cap.read()
     
-    cv2.imwrite("%s.png"%imgfilename, frame)
+    cv2.imwrite("%s"%imgfilename, frame)
     
     cap.release()
     

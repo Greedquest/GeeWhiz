@@ -129,9 +129,7 @@ def get_so_list(img_colour):
     return SOs
 
 def update_so_values(SOs,img_colour):
-    print("here")
     for so in SOs:
-        print(so, type(so))
         so.np = subscript_np_array(so.box,img_colour)
         try:
             so.value = so.measure_func(so)
