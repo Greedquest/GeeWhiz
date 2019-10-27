@@ -1,6 +1,7 @@
 from DataCollation.SemanticOutputMap import SemanticMap
 from DataCollation.Semantic_Class import Discrete, 
 import random
+import threading
 oldValues = {}
 
 def generateDummyValues(dummyMap):
@@ -10,6 +11,8 @@ def generateDummyValues(dummyMap):
 class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
+        if dummyRun:
+            self.refreshDelay = 3000; 
 
     def Run(self):
         ###Get user input - get all the calibrations and initialisations
@@ -24,6 +27,7 @@ class Runner:
             # Add to database
             # check against error thresholds
             # if error then display alert
+            threading.thread.sleep(self.refreshDelay)
             break
 
         print("Done!")
