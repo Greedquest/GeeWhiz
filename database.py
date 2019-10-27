@@ -35,7 +35,7 @@ def write_to_log(SOs):
 
     with open('log.csv','a') as f:
         w = csv.writer(f, delimiter = ',')
-        w.writerow([datetime.datetime.now()] + [semanticObj.values for semanticObj in SOs])
+        w.writerow([datetime.datetime.now()] + [semanticObj.value for semanticObj in SOs])
      
      
 if __name__ == '__main__':
