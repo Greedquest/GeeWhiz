@@ -97,7 +97,7 @@ def get_so_list(img_colour):
     boxes = B1andB2.functions_1.cv2_to_box(img_colour)
 
     # print(boxes)
-    boxes = boxes[1:-1]
+    boxes = boxes[0:-1]
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])
@@ -128,10 +128,6 @@ def get_so_list(img_colour):
     return SOs
 
 def update_so_values(SOs,img_colour):
-<<<<<<< HEAD
-
-=======
->>>>>>> 94d893fe3f673c5e242e1caa476850b35fe15105
     for so in SOs:
         so.np = subscript_np_array(so.box,img_colour)
         try:

@@ -21,8 +21,10 @@ DIGITS_LOOKUP = {
 
 
 # load the example image
-image = cv2.imread('example.jpg')
-image = cv2.imread("example.jpg", 1)
+#image = cv2.imread('example.jpg')
+#image = cv2.imread("example.jpg", 1)
+
+image = cv2.imread("roi2.jpg", 1)
  
 # pre-process the image by resizing it, converting it to
 # graycale, blurring it, and computing an edge map

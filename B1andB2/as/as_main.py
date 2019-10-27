@@ -58,6 +58,7 @@ ret,thresh = cv2.threshold(im_out,127,255,0)
 # find contours in the binary image
 contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 count = 1
+rectangle_coords = []
 for c in contours:
     
     # adding rectangles
@@ -66,6 +67,7 @@ for c in contours:
         pass
     else:
         top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
+        rectangle_coords.append((x, y, w, h))
         cv2.rectangle(img_colour,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
         cv2.putText(img_colour, str(count), (x - 10, y - 10),
 		    cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
@@ -88,6 +90,8 @@ for c in contours:
         # display the image
         cv2.imshow("Image", img_colour)
         cv2.waitKey(0)
+    
+print("rectangle_coords: ", rectangle_coords)
    
 
 
