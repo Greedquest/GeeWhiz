@@ -33,10 +33,10 @@ class Discrete(Semantic):
         
         def find_nearest(array, value):
            
-            array = np.array(list(array))
-            differenceArray = np.abs(array - value)
+            stateArray = np.array(list(array))
+            differenceArray = np.abs(stateArray - value)
             idx = differenceArray.argmin()
-            return array[idx]
+            return stateArray[idx]
         
         "A Discrete value lookup will map state to the closest matching value for comparable types, or exact match for anything else"
         try:
