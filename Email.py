@@ -31,6 +31,15 @@ def sendEmail(msg):
 #    sendEmail(msg)
     
 def dispatchFaultMessage(conditions_map, semantic_map, to):
+    """
+    conditions_map = {OutputID:Conditions} with as many SIMULTANEOUS conditions as needed
+    semantic_map = {OutputID:Semantic Objects}
+        
+    For objects with continuous values (continuous dials), the condition should be [lower limit,upper limit]
+        It will give True if the value is below a lower limit or above the upper
+        Replace l limit with False if you don't want a lower limit
+    For objects with string conditions "On", just give "On". Capitalisation inconsistencies don't matter
+    """
     from email.message import EmailMessage
     
     faultlist = []
