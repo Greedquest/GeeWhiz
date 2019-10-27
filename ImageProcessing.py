@@ -91,7 +91,6 @@ def create_placeholder(pixels):
 
 
 def get_so_list(img_colour):
-    #print(img_colour, type(img_colour), np.shape(img_colour))
     SOs = []
     # main list of all semantic objects
 
@@ -132,6 +131,10 @@ def get_so_list(img_colour):
     return SOs
 
 def update_so_values(SOs,img_colour):
+<<<<<<< HEAD
+
+=======
+>>>>>>> 94d893fe3f673c5e242e1caa476850b35fe15105
     for so in SOs:
         so.np = subscript_np_array(so.box,img_colour)
         try:

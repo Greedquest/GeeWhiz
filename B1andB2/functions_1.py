@@ -64,14 +64,14 @@ def create_img_sections (image):
     ret,thresh = cv2.threshold(image,127,255,0)
     
     # find contours in the binary image
-    _, contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    contours, heirarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     rectangle_coords = []
     count = 1
     for c in contours:
         
         # creating adding rectangles
         x,y,w,h = cv2.boundingRect(c)
-        if w/h < 0.3 or w/h > 3:
+        if (w/h < 0.3 or w/h > 3) or w < 15 or h < 15:
             pass
         else:
             top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
@@ -225,9 +225,15 @@ def seven_seg_disp (image):
     return number
 
 
+<<<<<<< HEAD
+if __name__ == '__main__':
+    img = cv2.imread('samplepic_cropped.png',0)
+    print(cv2_to_box(img))
+=======
 if __name__ == "__main__":
     img = cv2.imread('samplepic_cropped.png', 1)
     cv2.imshow('test',dilate_then_erode(img))
     cv2.waitKey(0)
 
+>>>>>>> 94d893fe3f673c5e242e1caa476850b35fe15105
 
