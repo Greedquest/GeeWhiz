@@ -15,12 +15,12 @@ from camCapture import camCapture
 
 
 class App:
-    def __init__(self, dummyRun=True):
+    def __init__(self, dummyRun=False):
         self._useDummyData = dummyRun
         if dummyRun:
             self.refreshDelay = 2.4
             # seconds
-        self.imagePath = "samplepic.png"
+        self.imagePath = "chickenpic"
 
     def Run(self):
         ###Get user input - get all the calibrations and initialisations
@@ -31,7 +31,7 @@ class App:
         self.setFaultConditions()
 
         ### Update loop
-        while True:
+        while False:
             print("Snap")
             self.updateValues()
             self.writeToDatabase()
