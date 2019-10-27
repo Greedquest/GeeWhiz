@@ -1,5 +1,4 @@
 from DataCollation.SemanticOutputMap import SemanticMap
-from DataCollation.Semantic_Class import Discrete, 
 import random
 import threading
 from ImageProcessing import update_so_values, get_so_list
@@ -9,7 +8,6 @@ oldValues = {}
 
 def generateDummyValues(dummyMap):
     pass
-
 
 class Runner:
     def __init__(self, dummyRun=True):
@@ -46,7 +44,6 @@ class Runner:
     def updateValues(self):
         #read new values
         generateDummyValues(self.semanticMap)
-        
 
     def defineDatabaseConnection(self):
         pass
@@ -58,7 +55,8 @@ class Runner:
     def sendEmail(self):
         pass
     
-    def writeToDatabase(self)
+    def writeToDatabase(self):
+        pass
 
 if __name__ == "__main__":
     runner = Runner(True)
