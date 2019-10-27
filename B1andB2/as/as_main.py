@@ -65,6 +65,8 @@ for c in contours:
     else:
         top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
         cv2.rectangle(img_colour,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
+        cv2.putText(img_colour, str(count), (x - 10, y - 10),
+		    cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
 
         roi = img_colour[bot_l:bot_r, top_l:top_r] 
         cv2.imwrite("roi%d.jpg" % count , roi)
