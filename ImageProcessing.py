@@ -104,7 +104,11 @@ def get_so_list(img_colour):
     print(boxes)
 
     # print(boxes)
+<<<<<<< HEAD
+    boxes = boxes[0:-1]
+=======
     
+>>>>>>> 854ee5d7f5aa3b192aac6edff97c8a226c0a1ab5
     # print(np.array(boxes)[...,1])
     # box_means = np.mean(box_arr[...,:2],axis=1)
     # boxes = sorted(boxes,key = lambda x:x[0])

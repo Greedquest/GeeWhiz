@@ -76,10 +76,13 @@ def create_img_sections (image):
         else:
             top_l, top_r, bot_l, bot_r = int(x-0.1*w), int(x+w*1.1), int(y-0.1*h), int(y+h*1.1)
             rectangle_coords.append((x, y, w, h))
-            cv2.rectangle(image,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
-            cv2.putText(image, str(count), (x - 10, y - 10),
+            cv2.rectangle(img_colour,(top_l,bot_l),(top_r,bot_r),(0,255,0),2)
+            cv2.putText(img_colour, str(count), (x - 10, y - 10),
 		        cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
+        
         count += 1
+    cv2.imshow("Image", img_colour)
+    cv2.waitKey(0)
     return rectangle_coords
 
 def cv2_to_box(img):
@@ -225,15 +228,27 @@ def seven_seg_disp (image):
     return number
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 854ee5d7f5aa3b192aac6edff97c8a226c0a1ab5
 if __name__ == '__main__':
+    img_colour = cv2.imread('samplepic_cropped.png',1)
     img = cv2.imread('samplepic_cropped.png',0)
     print(cv2_to_box(img))
+<<<<<<< HEAD
+'''
+=======
 
 if __name__ == "__main__":
+>>>>>>> 854ee5d7f5aa3b192aac6edff97c8a226c0a1ab5
     img = cv2.imread('samplepic_cropped.png', 1)
     cv2.imshow('test',dilate_then_erode(img))
     cv2.waitKey(0)
+    '''
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 854ee5d7f5aa3b192aac6edff97c8a226c0a1ab5
 
