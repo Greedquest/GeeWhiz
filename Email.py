@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from DataCollation import Semantic_Class as Sem
 
 def sendEmail(msg):
