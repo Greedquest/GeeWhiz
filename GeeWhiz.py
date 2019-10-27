@@ -1,8 +1,8 @@
 from DataCollation.SemanticOutputMap import SemanticMap
-import random
-import threading
+from time import sleep
 from ImageProcessing import update_so_values, get_so_list
 from E3.Fault_Conditions import ConditionCheck as check_for_error
+from Email import dispatchFaultMessage
 
 oldValues = {}
 
@@ -13,7 +13,7 @@ class Runner:
     def __init__(self, dummyRun=True):
         self._useDummyData = dummyRun
         if dummyRun:
-            self.refreshDelay = 3000; 
+            self.refreshDelay = 2.4; #seconds
         self.conditionMaps = []
 
     def Run(self):
@@ -27,10 +27,10 @@ class Runner:
         while True:
             self.updateValues()
             self.writeToDatabase()
-            # check against error thresholds
-            # if error then display alert
-            threading.thread.sleep(self.refreshDelay)
-            break
+            if self.checkForErrors():
+                break
+            else:
+                sleep(self.refreshDelay)
 
         print("Done!")
         print(self.semanticMap)
@@ -51,9 +51,16 @@ class Runner:
     def setFaultConditions(self):
         #generate condition map
         pass
+    
+    def checkForErrors(self):
+        for conditionMap in self.conditionMaps:
+            if check_for_error(conditionMap, self.semanticMap):
+                #send error alert
+                dispatchFaultMessage(conditionMap,self.semanticMap)
+                anyError = True
+                
+        return anyError
 
-    def sendEmail(self):
-        pass
     
     def writeToDatabase(self):
         pass
